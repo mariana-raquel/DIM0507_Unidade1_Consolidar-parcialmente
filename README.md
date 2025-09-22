@@ -23,7 +23,6 @@ Implementar a funcionalidade de consolidação parcial das notas de uma turma de
 		- O aluno terá direito a realizar uma avaliação de reposição se:
 			- Cumprir o critério de frequência mínima de 75%.
 			- Sua média parcial for igual ou superior a 3,0.
-			- Tiver apenas uma nota de unidade avaliativa inferior a 4,0. (Obs.: Acrescentei essa condição, pois como a reposição só substitui a menor nota, uma delas ainda continuaria abaixo de 4,0)
 		* A nota da avaliação de reposição substituirá a menor nota entre as unidades avaliativas do aluno.
 	3. Critérios para Reprovação:
 		- O aluno será reprovado se:
