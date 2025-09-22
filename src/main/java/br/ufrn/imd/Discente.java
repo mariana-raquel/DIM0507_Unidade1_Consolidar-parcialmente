@@ -1,4 +1,4 @@
-package br.ufrn.imd.models;
+package br.ufrn.imd;
 
 public class Discente {
 	private String nome;

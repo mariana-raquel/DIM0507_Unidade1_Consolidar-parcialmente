@@ -1,2 +1,6 @@
-consolidacao-parcial/.mvn/*
-consolidacao-parcial/target/*
+/target/
+token.txt
+.classpath
+.project
+.settings/
+
