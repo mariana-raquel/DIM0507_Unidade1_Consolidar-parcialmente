@@ -125,7 +125,7 @@ public class Matricula {
 	
 	private Boolean verificarFrequencia() {
 		Boolean frequenciaPermitida = false;
-		if(getFrequencia() > 75) {
+		if(getFrequencia() >= 75) {
 			frequenciaPermitida = true;
 		}
 		return frequenciaPermitida;
