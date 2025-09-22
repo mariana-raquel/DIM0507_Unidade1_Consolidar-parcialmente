@@ -1,7 +1,10 @@
-package br.ufrn.imd.models;
+package br.ufrn.imd;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
+
+import com.google.common.collect.Lists;
 
 public class Matricula {
 	private final Discente discente;
@@ -32,7 +35,7 @@ public class Matricula {
 	}
 
 	public void cadastrarNota1(BigDecimal nota1) {
-		if(verificarIntervaloNotas(nota1)) {
+		if(nota1.compareTo(new BigDecimal(0)) < 0 || nota1.compareTo(new BigDecimal(10)) > 0) {
 			throw new IllegalArgumentException("A nota deve estar entre 0 e 10");
 		} 
 		this.nota1 = nota1;
@@ -43,7 +46,7 @@ public class Matricula {
 	}
 
 	public void cadastrarNota2(BigDecimal nota2) {
-		if(verificarIntervaloNotas(nota2)) {
+		if(nota2.compareTo(new BigDecimal(0)) < 0 || nota2.compareTo(new BigDecimal(10)) > 0) {
 			throw new IllegalArgumentException("A nota deve estar entre 0 e 10");
 		} 
 		this.nota2 = nota2;
@@ -54,7 +57,7 @@ public class Matricula {
 	}
 
 	public void cadastrarNota3(BigDecimal nota3) {
-		if(verificarIntervaloNotas(nota3)) {
+		if(nota3.compareTo(new BigDecimal(0)) < 0 || nota3.compareTo(new BigDecimal(10)) > 0) {
 			throw new IllegalArgumentException("A nota deve estar entre 0 e 10");
 		} 
 		this.nota3 = nota3;
@@ -65,7 +68,7 @@ public class Matricula {
 	}
 
 	public void cadastrarFrequencia(Integer frequencia) {
-		if(verificarIntervaloFrequencia(frequencia)) {
+		if(frequencia < 0 || frequencia > 100) {
 			throw new IllegalArgumentException("A frequencia deve estar entre 0 e 100");
 		} 
 		this.frequencia = frequencia;
@@ -104,19 +107,25 @@ public class Matricula {
 	}
 	
 	public void consolidarParcialmente() {
-		boolean frequenciaPermitida = verificarFrequencia();
 		this.calcularMediaParcial();
-		if(frequenciaPermitida) {
+		
+		if(this.verificarFrequencia()) {
+			
 			if(this.verificarNotaMinima() && this.mediaParcial.compareTo(new BigDecimal(6)) >= 0) {
-				this.setStatus(StatusAprovacao.APR);				
+				this.setStatus(StatusAprovacao.APR);		
+				
 			} else if(this.mediaParcial.compareTo(new BigDecimal(3)) >= 0) {
 				this.setStatus(StatusAprovacao.REC);
+				
 			} else {
 				this.setStatus(StatusAprovacao.REP);
 			}
+			
 		} else {
+			
 			if(this.mediaParcial.compareTo(new BigDecimal(3)) <= 0) {
 				this.setStatus(StatusAprovacao.REPMF);
+				
 			} else {
 				this.setStatus(StatusAprovacao.REPF);
 			}
@@ -125,9 +134,11 @@ public class Matricula {
 	
 	private Boolean verificarFrequencia() {
 		Boolean frequenciaPermitida = false;
+		
 		if(getFrequencia() >= 75) {
 			frequenciaPermitida = true;
 		}
+		
 		return frequenciaPermitida;
 	}
 	
@@ -140,65 +151,16 @@ public class Matricula {
 	
 	private Boolean verificarNotaMinima() {
 		Boolean notaMinimaPermitida = false;
-		if(this.getNota1().compareTo(new BigDecimal(4)) >= 0
-			&& this.getNota2().compareTo(new BigDecimal(4)) >= 0
-			&& this.getNota3().compareTo(new BigDecimal(4)) >= 0) {
+		
+		List<BigDecimal> notas = Lists.newArrayList(this.nota1, this.nota2, this.nota2);
+		
+		long notasIntervaloPermitido = notas.stream().filter(n -> n.compareTo(new BigDecimal(4)) >= 0).count();
+		
+		if(notasIntervaloPermitido == 3l) {
 			notaMinimaPermitida = true;
 		}
+		
 		return notaMinimaPermitida;
 	}
-	
-	private Boolean verificarIntervaloNotas(BigDecimal valor) {
-		Boolean intervaloInvalido = false;
-		if(valor.compareTo(new BigDecimal(0)) < 0 || valor.compareTo(new BigDecimal(10)) > 0) {
-			intervaloInvalido = true;
-		}
-		return intervaloInvalido;
-	}
-	
-	private Boolean verificarIntervaloFrequencia(Integer valor) {
-		Boolean intervaloInvalido = false;
-		if(valor < 0 || valor > 100) {
-			intervaloInvalido = true;
-		}
-		return intervaloInvalido;
-	}
-	
-	/*
-	 	1. Critérios de Aprovação Direta:
-			O aluno é considerado aprovado se:
-			Média parcial nas unidades avaliativas for igual ou superior a 6,0.
-			Nenhuma nota de unidade avaliativa for inferior a 4,0.
-			Frequência mínima de 75% da carga horária for atingida.
-			Média final: A média final do aluno aprovado será a média parcial, e o aluno estará dispensado da
-			avaliação de reposição.
-		2. Critérios para Avaliação de Reposição:
-			O aluno terá direito a realizar uma avaliação de reposição se:
-			Cumprir o critério de frequência mínima de 75%.
-			Sua média parcial for igual ou superior a 3,0.
-			A nota da avaliação de reposição substituirá a menor nota entre as unidades avaliativas do aluno.
-		3. Reprovação:
-			O aluno será reprovado se:
-			Sua média parcial for inferior a 3,0.
-			Não atingir a frequência mínima de 75%.
-			Não atender aos critérios para realizar a avaliação de reposição.
-			Média final: O aluno reprovado terá sua média final igual à média parcial.
-	*/
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }

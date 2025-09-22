@@ -1,4 +1,4 @@
-package br.ufrn.imd.models;
+package br.ufrn.imd;
 
 public enum StatusAprovacao {
 	APR,	//	Aprovado por Média: Aprovado(a), sem reposição, por obter média igual ou superior a 6,0 e que não tirar nenhuma nota inferior a 4,0 antes da reposição.
